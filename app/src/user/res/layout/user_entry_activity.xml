@@ -4,16 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
-    tools:context=".UserEntryActivity">
+    tools:context=".ui.UserEntryActivity">
+
+    <TextView
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/tvIsBotOnline"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="9sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
 
     <EditText
         android:padding="10dp"
         android:id="@+id/etUserMove"
         android:text=""
+        android:lines="1"
+        android:inputType="text"
+        android:hint="@string/user_commands"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnSendCommand"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btnSendCommand"
         android:layout_width="0dp"
@@ -21,19 +34,20 @@
 
     <Button
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/send_command"
+        app:layout_constraintTop_toBottomOf="@id/tvIsBotOnline"
+        android:text="@string/send"
         android:id="@+id/btnSendCommand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        tools:listitem="@layout/item_actions"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnSendCommand"
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/rvUserMoves"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

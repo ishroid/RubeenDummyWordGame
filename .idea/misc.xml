@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.41354166666666664" />
         <entry key="app/src/user/res/layout/activity_main.xml" value="0.41354166666666664" />
+        <entry key="app/src/user/res/layout/item_actions.xml" value="0.4125" />
         <entry key="app/src/user/res/layout/item_user_move.xml" value="0.4114583333333333" />
         <entry key="app/src/user/res/layout/user_entry_activity.xml" value="0.4125" />
       </map>

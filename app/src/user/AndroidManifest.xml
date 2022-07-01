@@ -3,7 +3,7 @@
     <application>
 
         <activity
-            android:name=".UserEntryActivity"
+            android:name=".ui.UserEntryActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -43,13 +43,13 @@ public class GameBotService extends Service {
         @Override
         public void handleMessage(@NonNull Message msg) {
             if (msg.what == GameConstants.GAME_USER_ACTION) {
-                String userCommand = msg.getData().getString("userCommand");
+                String userCommand = msg.getData().getString(GameConstants.KEY_USER_COMMAND);
                 Utilities.showToast(userCommand+ " Received",GameBotService.this);
 
                 Message botReplyCommandMessage = Message.obtain(null,GameConstants.GAME_BOT_ACTION);
                 String botCommand ="Bot Reply "+ userCommand ;
                 Bundle botData = new Bundle();
-                botData.putString("botCommand",botCommand);
+                botData.putString(GameConstants.KEY_BOT_COMMAND,botCommand);
                 botReplyCommandMessage.setData(botData);
 
                 try {
