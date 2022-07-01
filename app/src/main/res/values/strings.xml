@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Dummy word game</string>
+    <string name="send_command">Send Command</string>
 </resources>
