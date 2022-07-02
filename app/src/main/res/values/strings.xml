@@ -5,4 +5,6 @@
     <string name="online">online</string>
     <string name="offline">offline</string>
     <string name="enter_reply">Please enter your reply</string>
+    <string name="connect">Connect</string>
+    <string name="game_over">Game Over</string>
 </resources>

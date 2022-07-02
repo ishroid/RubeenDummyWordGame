@@ -13,14 +13,13 @@ import android.os.RemoteException;
 import androidx.annotation.NonNull;
 
 import com.rubean.interviewGame.utils.GameConstants;
-import com.rubean.interviewGame.utils.Utilities;
 
-public class GameBotService extends Service implements IGameMoveCallbacks {
+public class GameBotService extends Service {
     GameManager gameManager;
     private final Messenger gameCommandSenderMessenger;
 
     public GameBotService() {
-        gameManager = new GameManager(this);
+        gameManager = new GameManager();
         gameCommandSenderMessenger = new Messenger(new GameCommandHandler(gameManager));
     }
 
@@ -38,19 +37,6 @@ public class GameBotService extends Service implements IGameMoveCallbacks {
         return gameCommandSenderMessenger.getBinder();
     }
 
-    @Override
-    public void onGameOver(String reason) {
-        Message botReplyCommandMessage = Message.obtain(null,GameConstants.GAME_OVER);
-        Bundle botData = new Bundle();
-        botData.putString(GameConstants.KEY_OVER_REASON,reason);
-        botReplyCommandMessage.setData(botData);
-        try {
-            gameCommandSenderMessenger.send(botReplyCommandMessage);
-        }catch (Exception er){
-            er.printStackTrace();
-        }
-    }
-
     private static class GameCommandHandler extends Handler {
         GameManager gameManager;
 
@@ -63,19 +49,34 @@ public class GameBotService extends Service implements IGameMoveCallbacks {
         public void handleMessage(@NonNull Message msg) {
             if (msg.what == GameConstants.GAME_USER_ACTION) {
                 String userCommand = msg.getData().getString(GameConstants.KEY_USER_COMMAND);
-                gameManager.addUserReply(userCommand);
 
-                Message botReplyCommandMessage = Message.obtain(null,GameConstants.GAME_BOT_ACTION);
-                String botCommand = gameManager.generateBotNextWord();
-                Bundle botData = new Bundle();
-                botData.putString(GameConstants.KEY_BOT_COMMAND,botCommand);
-                botReplyCommandMessage.setData(botData);
+                boolean isUserCommandSuccess = gameManager.verifyUserNextMove(userCommand, reason -> {
+                    sendData(reason,GameConstants.GAME_OVER,msg);
+                });
 
-                try {
-                    msg.replyTo.send(botReplyCommandMessage);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
+                if (isUserCommandSuccess){
+                    String botCommand = gameManager.generateBotNextWord();
+                    boolean isBotCommandSuccess = gameManager.verifyBotNextMove(botCommand, reason -> {
+                        sendData(reason,GameConstants.GAME_OVER,msg);
+                    });
+
+                    if (isBotCommandSuccess) {
+                        sendData(gameManager.getFinalStringAfterBotMove(), GameConstants.GAME_BOT_ACTION, msg);
+                    }
                 }
+            }
+        }
+
+        private void sendData(String data,int actionWhat,Message msg){
+            Message botReplyCommandMessage = Message.obtain(null,actionWhat);
+            Bundle botData = new Bundle();
+            botData.putString(GameConstants.KEY_BOT_COMMAND,data);
+            botReplyCommandMessage.setData(botData);
+
+            try {
+                msg.replyTo.send(botReplyCommandMessage);
+            } catch (RemoteException e) {
+                e.printStackTrace();
             }
         }
     }

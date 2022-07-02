@@ -89,14 +89,14 @@ public class BotManager {
         }
         @Override
         public void handleMessage(@NonNull Message msg) {
+            String botReplyCommand = msg.getData().getString(GameConstants.KEY_BOT_COMMAND);
+
             if (msg.what == GameConstants.GAME_BOT_ACTION) {
-                String botReplyCommand = msg.getData().getString(GameConstants.KEY_BOT_COMMAND);
                 if (gameCallback!=null)
                     gameCallback.onReceiveBotReply(botReplyCommand);
             }else  if (msg.what == GameConstants.GAME_OVER) {
-                String reason = msg.getData().getString(GameConstants.KEY_OVER_REASON);
                 if (gameCallback!=null)
-                    gameCallback.onGameOver(reason);
+                    gameCallback.onGameOver(botReplyCommand);
             }
         }
     }

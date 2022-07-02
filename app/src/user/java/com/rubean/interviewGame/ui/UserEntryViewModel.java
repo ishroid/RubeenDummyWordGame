@@ -77,7 +77,11 @@ public class UserEntryViewModel extends ViewModel implements IGameCallback {
 
     @Override
     public void onGameOver(String gameOverReason) {
-
+        gameOverLiveData.setValue(gameOverReason);
     }
 
+    public void clearUI() {
+        actionModelArrayList.clear();
+        actionLiveData.setValue(actionModelArrayList);
+    }
 }

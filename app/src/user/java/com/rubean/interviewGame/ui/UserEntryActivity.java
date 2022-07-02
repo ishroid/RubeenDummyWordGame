@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.Group;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +29,10 @@ public class UserEntryActivity extends AppCompatActivity {
     private RvActionAdapter rvActionAdapter;
     private EditText etUserMove;
     private TextView tvIsOnline;
+    private TextView tvGameOverDetail;
+    private Button btnSendCommand;
+    private boolean isServiceOnline = false;
+    private Group gameOverGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +44,16 @@ public class UserEntryActivity extends AppCompatActivity {
         setupUI();
         observerViewModels();
 
-        findViewById(R.id.btnSendCommand).setOnClickListener(v -> {
-            String cmdText = etUserMove.getText().toString();
-            if (cmdText.isEmpty()){
-                Utilities.showToast(getString(R.string.enter_reply),this);
-            }else
-                viewModel.sendUserCommand(cmdText);
+        btnSendCommand.setOnClickListener(v -> {
+            if (isServiceOnline){
+                String cmdText = etUserMove.getText().toString();
+                if (cmdText.isEmpty()){
+                    Utilities.showToast(getString(R.string.enter_reply),this);
+                }else
+                    viewModel.sendUserCommand(cmdText);
+            }else{
+                viewModel.bindToGameBotService(this);
+            }
 
         });
 
@@ -62,7 +73,10 @@ public class UserEntryActivity extends AppCompatActivity {
 
 
     private void setupUI(){
+        gameOverGroup = findViewById(R.id.gameOverGroup);
+        btnSendCommand =  findViewById(R.id.btnSendCommand);
         etUserMove = findViewById(R.id.etUserMove);
+        tvGameOverDetail = findViewById(R.id.tvGameOverDetail);
         tvIsOnline = findViewById(R.id.tvIsBotOnline);
         RecyclerView recyclerView = findViewById(R.id.rvUserMoves);
         rvActionAdapter = new RvActionAdapter();
@@ -77,10 +91,17 @@ public class UserEntryActivity extends AppCompatActivity {
         });
 
         viewModel.getServiceConnectionLiveData().observe(this,isServiceConnected -> {
+            isServiceOnline = isServiceConnected;
+
             if (isServiceConnected){
+                etUserMove.setEnabled(true);
+                btnSendCommand.setText(R.string.send);
                 tvIsOnline.setBackgroundColor(ContextCompat.getColor(this,R.color.online));
                 tvIsOnline.setText(R.string.online);
             }else{
+                viewModel.clearUI();
+                etUserMove.setEnabled(false);
+                btnSendCommand.setText(R.string.connect);
                 tvIsOnline.setBackgroundColor(ContextCompat.getColor(this,R.color.offline));
                 tvIsOnline.setText(R.string.offline);
             }
@@ -88,6 +109,9 @@ public class UserEntryActivity extends AppCompatActivity {
 
         viewModel.getGameOverLiveData().observe(this,reason -> {
             if (reason!=null && !reason.isEmpty()){
+                gameOverGroup.setVisibility(View.VISIBLE);
+                tvGameOverDetail.setText(reason);
+                etUserMove.setEnabled(false);
                 Utilities.showToast(reason,this);
             }
         });
