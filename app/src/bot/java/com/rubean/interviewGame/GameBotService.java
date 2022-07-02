@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
@@ -20,31 +21,31 @@ public class GameBotService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Utilities.showToast("onCreate GameBotService",this);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Utilities.showToast("onStartCommand GameBotService",this);
         return super.onStartCommand(intent, flags, startId);
     }
 
 
     @Override
     public IBinder onBind(Intent intent) {
-        Utilities.showToast("onBind GameBotService",this);
         return gameCommandSenderMessenger.getBinder();
     }
 
 
-    private Messenger gameCommandSenderMessenger = new Messenger(new GameCommandHandler());
-    private class GameCommandHandler extends Handler {
+    private final Messenger gameCommandSenderMessenger = new Messenger(new GameCommandHandler());
+    private static class GameCommandHandler extends Handler {
+
+        GameCommandHandler(){
+            super(Looper.getMainLooper());
+        }
 
         @Override
         public void handleMessage(@NonNull Message msg) {
             if (msg.what == GameConstants.GAME_USER_ACTION) {
                 String userCommand = msg.getData().getString(GameConstants.KEY_USER_COMMAND);
-                Utilities.showToast(userCommand+ " Received",GameBotService.this);
 
                 Message botReplyCommandMessage = Message.obtain(null,GameConstants.GAME_BOT_ACTION);
                 String botCommand ="Bot Reply "+ userCommand ;
@@ -54,16 +55,11 @@ public class GameBotService extends Service {
 
                 try {
                     msg.replyTo.send(botReplyCommandMessage);
-                    Utilities.showToast("Message sent successfull",GameBotService.this);
                 } catch (RemoteException e) {
-                    Utilities.showToast(e.toString(),GameBotService.this);
                     e.printStackTrace();
                 }
-            }else{
-                Utilities.showToast(" msg.what "+msg.what,GameBotService.this);
             }
         }
-
     }
 
 }
