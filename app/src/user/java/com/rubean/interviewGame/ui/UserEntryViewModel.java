@@ -19,6 +19,7 @@ public class UserEntryViewModel extends ViewModel implements IGameCallback {
     private final ArrayList<MoveActionModel> actionModelArrayList = new ArrayList<>();
     private final MutableLiveData<List<MoveActionModel>> actionLiveData = new MutableLiveData<List<MoveActionModel>>();
     private final MutableLiveData<Boolean> serviceConnectionLiveData = new MutableLiveData<Boolean>();
+    private final MutableLiveData<String> gameOverLiveData = new MutableLiveData<String>();
 
     public LiveData<List<MoveActionModel>> getActionLiveData(){
         return actionLiveData;
@@ -26,6 +27,10 @@ public class UserEntryViewModel extends ViewModel implements IGameCallback {
 
     public LiveData<Boolean> getServiceConnectionLiveData(){
         return serviceConnectionLiveData;
+    }
+
+    public LiveData<String> getGameOverLiveData(){
+        return gameOverLiveData;
     }
 
     private void addBotActionItem(String botCommand){
@@ -68,6 +73,11 @@ public class UserEntryViewModel extends ViewModel implements IGameCallback {
     @Override
     public void onSendCommandToBot(String userCommand) {
         addUserActionItem(userCommand);
+    }
+
+    @Override
+    public void onGameOver(String gameOverReason) {
+
     }
 
 }

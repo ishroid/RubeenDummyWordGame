@@ -85,6 +85,12 @@ public class UserEntryActivity extends AppCompatActivity {
                 tvIsOnline.setText(R.string.offline);
             }
         });
+
+        viewModel.getGameOverLiveData().observe(this,reason -> {
+            if (reason!=null && !reason.isEmpty()){
+                Utilities.showToast(reason,this);
+            }
+        });
     }
 
 }

@@ -5,4 +5,5 @@ public interface IGameCallback {
     void onServiceDisconnected();
     void onReceiveBotReply(String botCommand);
     void onSendCommandToBot(String userCommand);
+    void onGameOver(String gameOverReason);
 }
