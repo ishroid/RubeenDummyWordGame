@@ -72,9 +72,17 @@ public class GameManager {
      * */
     private boolean isTwoOrMoreWordsTypeByUser(String[] userWords, String[] totalWordsTillNow, IGameMoveCallbacks moveCallback){
         boolean isWrongInitMove = (totalWordsTillNow.length==1 && userWords.length>1);
-        boolean isTwoOrMoreWordsTypeByUser =  isWrongInitMove || (totalWordsTillNow.length>1 && ((userWords.length-totalWordsTillNow.length)!=1));
-        if (moveCallback!=null && isTwoOrMoreWordsTypeByUser)
-            moveCallback.onGameOver("USER: Lose the game \n Type more then one word");
+        int diffLength = (userWords.length-totalWordsTillNow.length);
+        boolean isTwoOrMoreWordsTypeByUser =  isWrongInitMove || (totalWordsTillNow.length>1 && (diffLength>1));
+        boolean isUserTypeLessWords =  isWrongInitMove || (totalWordsTillNow.length>1 && (diffLength<1));
+
+        String reasonString = "USER: Lose the game \n Type more then one word";
+        if (isUserTypeLessWords){
+            reasonString="USER: Lose the game \n user type less words";
+        }
+        if (moveCallback!=null && (isTwoOrMoreWordsTypeByUser || isUserTypeLessWords))
+            moveCallback.onGameOver(reasonString);
+
         return isTwoOrMoreWordsTypeByUser;
     }
 

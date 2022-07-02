@@ -33,6 +33,7 @@ public class UserEntryActivity extends AppCompatActivity {
     private Button btnSendCommand;
     private boolean isServiceOnline = false;
     private Group gameOverGroup;
+    private  RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +79,7 @@ public class UserEntryActivity extends AppCompatActivity {
         etUserMove = findViewById(R.id.etUserMove);
         tvGameOverDetail = findViewById(R.id.tvGameOverDetail);
         tvIsOnline = findViewById(R.id.tvIsBotOnline);
-        RecyclerView recyclerView = findViewById(R.id.rvUserMoves);
+        recyclerView= findViewById(R.id.rvUserMoves);
         rvActionAdapter = new RvActionAdapter();
         recyclerView.setAdapter(rvActionAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager( this));
@@ -88,6 +89,7 @@ public class UserEntryActivity extends AppCompatActivity {
         viewModel.getActionLiveData().observe(this, moveActionModels -> {
             //We need to submit new object to the list otherwise it will not calculate the diff and ignore the changes.
             rvActionAdapter.submitList(new ArrayList<>(moveActionModels));
+            recyclerView.smoothScrollToPosition(rvActionAdapter.getItemCount());
         });
 
         viewModel.getServiceConnectionLiveData().observe(this,isServiceConnected -> {
