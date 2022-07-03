@@ -45,7 +45,7 @@ public class UserEntryActivity extends AppCompatActivity {
 
         btnSendCommand.setOnClickListener(v -> {
             if (isServiceOnline){
-                String cmdText = etUserMove.getText().toString();
+                String cmdText = etUserMove.getText().toString().trim();
                 if (cmdText.isEmpty()){
                     Utilities.showToast(getString(R.string.enter_reply),this);
                 }else {
