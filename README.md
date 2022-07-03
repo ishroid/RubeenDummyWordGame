@@ -13,7 +13,7 @@ This open-source project contain two variant [bot, user] with default main app.
 - [All bot related code is available here][PlDb]
 
 ## Base App [main]
-- The main module that help us to distribute different veriant of app.
+- The main module that help us to distribute different variant of app.
 - Base of project with package [com.rubean.interviewGame]
 - This will work like a bridge between Game BOT and User.
 - Through this module we are exposing our Game SDK as BotManager class,
@@ -44,7 +44,7 @@ This open-source project contain two variant [bot, user] with default main app.
 As i am following MVVM & clean architecture , the purpose of the classes being explained here.
 
 - [bot] [GameBotService](/app/src/bot/java/com/rubean/interviewGame/GameBotService.java)
-  This is remote service any one how wanted to play game , must make service conneciton to communicate with bot,it contain GameCommandHandler that is being used to make two communication.
+  This is remote service any one wanted to play game , must make service connection to communicate with bot,it contain GameCommandHandler that is being used to make two communication.
 - [bot] [IGameMoveCallbacks](/app/src/bot/java/com/rubean/interviewGame/IGameMoveCallbacks.java)
   A interface that is being used only in [bot] to get callbacks on the service only if it's GameOver step.
 - [bot] [GameManager](/app/src/bot/java/com/rubean/interviewGame/GameManager.java)
@@ -54,15 +54,15 @@ As i am following MVVM & clean architecture , the purpose of the classes being e
 - [main] [IGameCallback](/app/src/main/java/com/rubean/interviewGame/callbacks/IGameCallback.java)
   main module expose IGameCallback interface for the user app to get all the callbacks from the remote service e.g. onServiceConnected,onGameOver etc.
 - [user] [UserEntryActivity](/app/src/user/java/com/rubean/interviewGame/ui/UserEntryActivity.java)
-  user veriant is just about the Android UI no business logic is being handled here, ViewModel is communicatinig with BotManager and sending results usinig LiveData to user UI.
+  user variant is just about the Android UI no business logic is being handled here, ViewModel is communicating with BotManager and sending results using LiveData to user UI.
 
 ### My learning from this project
-> While working on this project i learn how to deal with remote service in Anndroid 11 or higher versions.
-> Whilte testing i found user app is not able to bind with game remote service on Android 11
+> While working on this project i learn how to deal with remote service in Android 11 or higher versions.
+> While testing i found user app is not able to bind with game remote service on Android 11
 > So i learn that, Android 11 introduces changes related to package visibility. These changes affect apps only if they target Android 11 or higher.
 
 ***Special Thanks to the creator of the "Interview test project".***
-for creating such intresting task.
+for creating such interesting task.
 
 ## License
 **Free Software, Hell Yeah!**
@@ -70,5 +70,5 @@ for creating such intresting task.
 [PlDb]: <https://github.com/ishroid/RubeenDummyWordGame/tree/main/app/src/bot>
 [fMain]: <https://github.com/ishroid/RubeenDummyWordGame/tree/main/app/src/main>
 [fUser]: <https://github.com/ishroid/RubeenDummyWordGame/tree/main/app/src/user>
-[botAPK]: <https://github.com/ishroid/RubeenDummyWordGame/tree/release/app-bot-release.apk>
-[userAPK]: <https://github.com/ishroid/RubeenDummyWordGame/tree/release/app-user-release.apk>
+[botAPK]: <https://github.com/ishroid/RubeenDummyWordGame/tree/main/release/app-bot-release.apk>
+[userAPK]: <https://github.com/ishroid/RubeenDummyWordGame/tree/main/release/app-user-release.apk>
