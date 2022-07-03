@@ -55,7 +55,6 @@ public class UserEntryActivity extends AppCompatActivity {
             }else{
                 viewModel.bindToGameBotService(this);
             }
-
         });
 
     }
@@ -125,7 +124,7 @@ public class UserEntryActivity extends AppCompatActivity {
 
                     StringBuilder lastTwoMoveBuilder = new StringBuilder();
                     lastTwoMoveBuilder.append("Last two steps were as below");
-                    lastTwoMoveBuilder.append("\n");
+                    lastTwoMoveBuilder.append("\n\n");
                     lastTwoMoveBuilder.append(lastToLastMove.actionOwner);
                     lastTwoMoveBuilder.append(" ");
                     lastTwoMoveBuilder.append(lastToLastMove.actionText);

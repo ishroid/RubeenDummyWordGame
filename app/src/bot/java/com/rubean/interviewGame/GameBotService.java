@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 
 import com.rubean.interviewGame.utils.GameConstants;
 
+/**
+ * This is remote service any one how wanted to play game , must make service connection to communicate with bot.
+ * */
 public class GameBotService extends Service {
     GameManager gameManager;
     private final Messenger gameCommandSenderMessenger;

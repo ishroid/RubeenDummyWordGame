@@ -3,6 +3,9 @@ package com.rubean.interviewGame;
 import java.util.HashSet;
 import java.util.Random;
 
+/**
+ *
+ * */
 public class GameManager {
     private final HashSet<String> allGameWords = new HashSet<>();
     private final StringBuilder wordsSoFar = new StringBuilder();
@@ -18,7 +21,11 @@ public class GameManager {
          String[] totalWordsTillNow = wordsSoFar.toString().split("\\s");
          String newAddedWord = userWords[userWords.length-1];
 
-        if (isDuplicateWordAdded(newAddedWord,moveCallback)){
+         if ((userWords.length==totalWordsTillNow.length) && totalWordsTillNow.length>1){ // Check if length same and ignore init case
+             if (moveCallback!=null)
+                 moveCallback.onGameOver("USER: Lose the game \n As didn't add his extra 1 word");
+             return false;
+         } else if (isDuplicateWordAdded(newAddedWord,moveCallback)){
             return false;
         }else  if (isTwoOrMoreWordsTypeByUser(userWords,totalWordsTillNow,moveCallback)){
             return false;
@@ -39,16 +46,15 @@ public class GameManager {
 
     /**
      * Verify bot step and add to move
+     * As the bot can always repeat things easily and will never lose,
+     * add some probability that the bot gives back the answer
+     * “TOO_MUCH_FOR_ME” and loses the game. Let the losing probability be 3%.
+     * Otherwise make it respond with the correct answer.
+     * You can choose new words for the bot as you’d like.
      * */
     public boolean verifyBotNextMove(String newAddedWord, IGameMoveCallbacks moveCallback){
         if((Math.random() < 0.03)) {
-            /*
-             * As the bot can always repeat things easily and will never lose,
-             *  add some probability that the bot gives back the answer
-             * “TOO_MUCH_FOR_ME” and loses the game. Let the losing probability be 3%.
-             * Otherwise make it respond with the correct answer.
-             * You can choose new words for the bot as you’d like.
-             * */
+
             if (moveCallback!=null)
                 moveCallback.onGameOver("BOT: is unlucky and Lose the game \nTOO_MUCH_FOR_ME ");
             return false;
@@ -83,7 +89,7 @@ public class GameManager {
         if (moveCallback!=null && (isTwoOrMoreWordsTypeByUser || isUserTypeLessWords))
             moveCallback.onGameOver(reasonString);
 
-        return isTwoOrMoreWordsTypeByUser;
+        return isUserTypeLessWords || isTwoOrMoreWordsTypeByUser;
     }
 
     /***
