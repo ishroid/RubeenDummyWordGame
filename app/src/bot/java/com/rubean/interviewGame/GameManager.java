@@ -92,7 +92,7 @@ public class GameManager {
     private boolean isDuplicateWordAdded(String newAddedWord, IGameMoveCallbacks moveCallback){
         boolean isDuplicateWordAdded = allGameWords.contains(newAddedWord);
         if (moveCallback!=null && isDuplicateWordAdded)
-            moveCallback.onGameOver("USER: Lose the game duplicate word found \n \""+newAddedWord+"\"");
+            moveCallback.onGameOver("USER: Lose the game repeating isn’t allowed, duplicate word found \n \""+newAddedWord+"\"");
         return isDuplicateWordAdded;
     }
 
@@ -105,13 +105,14 @@ public class GameManager {
         boolean isCorrectInOrder = false;
         String reasonString = "USER: Lose the game \n Words were not in correct order";
         if  (userWords.length>1){ // Checking if not 1st move
-            for(int i =0; i<totalWordsTillNow.length ; i++){
+            for(int i =0; i<totalWordsTillNow.length ; i++) {
                 //Ignoring the newly added word in userWords we are just checking if all previous words are at same index
                 String previousWordAtIndex = totalWordsTillNow[i];
                 String userWordAtIndex = userWords[i];
                 isCorrectInOrder= previousWordAtIndex.equals(userWordAtIndex);
-                if (!isCorrectInOrder && !allGameWords.contains(userWordAtIndex)){
-                    reasonString = "USER: Lose the game \n Unknown word \""+userWordAtIndex+"\" in the order";
+                if (!isCorrectInOrder){
+                    reasonString = "USER: Lose the game \n incorrect word \""+userWordAtIndex+"\" in the order.\n it should be \""+previousWordAtIndex+"\"";
+                    break;
                 }
             }
         }else

@@ -18,6 +18,14 @@ import androidx.annotation.NonNull;
 import com.rubean.interviewGame.callbacks.IGameCallback;
 import com.rubean.interviewGame.utils.GameConstants;
 
+/**
+ * BotManager is the bridge class between Game BOT and User,
+ * it will work as SDK of our Game.
+ * It contain all the logic related to remote bounded service connection and handler,
+ * so our user don't need to handle any android and lifecycle related stuff,
+ * they will just get callbacks on the basis of submitted action.
+ *
+ * */
 public class BotManager {
 
     private static final String BOAT_ACTION_TRIGGERED  = "com.rubean.interviewGame.GameBotService.STARTORBIND";

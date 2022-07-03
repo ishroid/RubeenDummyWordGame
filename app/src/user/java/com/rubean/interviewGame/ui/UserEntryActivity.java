@@ -48,8 +48,10 @@ public class UserEntryActivity extends AppCompatActivity {
                 String cmdText = etUserMove.getText().toString();
                 if (cmdText.isEmpty()){
                     Utilities.showToast(getString(R.string.enter_reply),this);
-                }else
+                }else {
                     viewModel.sendUserCommand(cmdText);
+                    etUserMove.setText("");
+                }
             }else{
                 viewModel.bindToGameBotService(this);
             }
@@ -122,10 +124,14 @@ public class UserEntryActivity extends AppCompatActivity {
                     MoveActionModel lastMove = rvActionAdapter.getCurrentList().get(length-1);
 
                     StringBuilder lastTwoMoveBuilder = new StringBuilder();
+                    lastTwoMoveBuilder.append("Last two steps were as below");
+                    lastTwoMoveBuilder.append("\n");
                     lastTwoMoveBuilder.append(lastToLastMove.actionOwner);
+                    lastTwoMoveBuilder.append(" ");
                     lastTwoMoveBuilder.append(lastToLastMove.actionText);
                     lastTwoMoveBuilder.append("\n");
                     lastTwoMoveBuilder.append(lastMove.actionOwner);
+                    lastTwoMoveBuilder.append(" ");
                     lastTwoMoveBuilder.append(lastMove.actionText);
                     tvLastTwoMove.setText(lastTwoMoveBuilder);
 
