@@ -2,14 +2,11 @@ package com.rubean.interviewGame.ui;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.os.RemoteException;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.content.ContextCompat;
@@ -17,12 +14,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.rubean.interviewGame.BotManager;
 import com.rubean.interviewGame.R;
-import com.rubean.interviewGame.utils.GameConstants;
+import com.rubean.interviewGame.models.MoveActionModel;
 import com.rubean.interviewGame.utils.Utilities;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class UserEntryActivity extends AppCompatActivity {
     private UserEntryViewModel viewModel;
@@ -30,6 +27,7 @@ public class UserEntryActivity extends AppCompatActivity {
     private EditText etUserMove;
     private TextView tvIsOnline;
     private TextView tvGameOverDetail;
+    private TextView tvLastTwoMove;
     private Button btnSendCommand;
     private boolean isServiceOnline = false;
     private Group gameOverGroup;
@@ -79,6 +77,7 @@ public class UserEntryActivity extends AppCompatActivity {
         etUserMove = findViewById(R.id.etUserMove);
         tvGameOverDetail = findViewById(R.id.tvGameOverDetail);
         tvIsOnline = findViewById(R.id.tvIsBotOnline);
+        tvLastTwoMove = findViewById(R.id.tvLastTwoMove);
         recyclerView= findViewById(R.id.rvUserMoves);
         rvActionAdapter = new RvActionAdapter();
         recyclerView.setAdapter(rvActionAdapter);
@@ -114,7 +113,23 @@ public class UserEntryActivity extends AppCompatActivity {
                 gameOverGroup.setVisibility(View.VISIBLE);
                 tvGameOverDetail.setText(reason);
                 etUserMove.setEnabled(false);
+                btnSendCommand.setVisibility(View.GONE);
                 Utilities.showToast(reason,this);
+
+                int length = rvActionAdapter.getCurrentList().size();
+                if (length>2){
+                    MoveActionModel lastToLastMove = rvActionAdapter.getCurrentList().get(length-2);
+                    MoveActionModel lastMove = rvActionAdapter.getCurrentList().get(length-1);
+
+                    StringBuilder lastTwoMoveBuilder = new StringBuilder();
+                    lastTwoMoveBuilder.append(lastToLastMove.actionOwner);
+                    lastTwoMoveBuilder.append(lastToLastMove.actionText);
+                    lastTwoMoveBuilder.append("\n");
+                    lastTwoMoveBuilder.append(lastMove.actionOwner);
+                    lastTwoMoveBuilder.append(lastMove.actionText);
+                    tvLastTwoMove.setText(lastTwoMoveBuilder);
+
+                }
             }
         });
     }

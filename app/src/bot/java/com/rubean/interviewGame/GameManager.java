@@ -1,10 +1,10 @@
 package com.rubean.interviewGame;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Random;
 
 public class GameManager {
-    private final LinkedHashSet<String> allGameWords = new LinkedHashSet<>();
+    private final HashSet<String> allGameWords = new HashSet<>();
     private final StringBuilder wordsSoFar = new StringBuilder();
 
     GameManager(){
@@ -20,9 +20,9 @@ public class GameManager {
 
         if (isDuplicateWordAdded(newAddedWord,moveCallback)){
             return false;
-        }else if(!isWordsAreInCorrectOrder(userWords,totalWordsTillNow,moveCallback)) {
+        }else  if (isTwoOrMoreWordsTypeByUser(userWords,totalWordsTillNow,moveCallback)){
             return false;
-        }else if (isTwoOrMoreWordsTypeByUser(userWords,totalWordsTillNow,moveCallback)){
+        }else if(!isWordsAreInCorrectOrder(userWords,totalWordsTillNow,moveCallback)) {
             return false;
         }else if (isWordLengthNotValid(userWords,moveCallback)){
             return false;
@@ -31,7 +31,7 @@ public class GameManager {
                 wordsSoFar.append(" ");
             }
             wordsSoFar.append(newAddedWord);
-            allGameWords.add(userReply);
+            allGameWords.add(newAddedWord);
             return true;
         }
 
@@ -74,7 +74,7 @@ public class GameManager {
         boolean isWrongInitMove = (totalWordsTillNow.length==1 && userWords.length>1);
         int diffLength = (userWords.length-totalWordsTillNow.length);
         boolean isTwoOrMoreWordsTypeByUser =  isWrongInitMove || (totalWordsTillNow.length>1 && (diffLength>1));
-        boolean isUserTypeLessWords =  isWrongInitMove || (totalWordsTillNow.length>1 && (diffLength<1));
+        boolean isUserTypeLessWords =  (totalWordsTillNow.length>1 && (diffLength<1));
 
         String reasonString = "USER: Lose the game \n Type more then one word";
         if (isUserTypeLessWords){
@@ -136,6 +136,14 @@ public class GameManager {
      * Generate random word of max length 5 for the bot
      * */
     String generateBotNextWord(){
+       String generatedWord = generateRandomWord();
+       while (allGameWords.contains(generatedWord)){
+           generatedWord = generateRandomWord();
+       }
+       return generatedWord;
+    }
+
+    private String generateRandomWord(){
         int GENERATED_WORD_LENGTH = 5;
         int leftLimit = 97; // letter 'a'
         int rightLimit = 122; // letter 'z'
