@@ -1,5 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--Android 11 (API level 30) or higher and queries for
+    information about the other apps that are installed on a device,-->
+    <queries>
+        <package android:name="com.rubean.interviewGame.bot" />
+    </queries>
+
     <application>
 
         <activity
